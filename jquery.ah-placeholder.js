@@ -16,9 +16,9 @@ $.fn.ahPlaceholder = function(options)
 {
     // property
     var defaults = {
-            placeholderColor : 'silver',
             placeholderAttr  : 'title',
-            likeApple        : false
+            likeApple        : false,
+			holdingClass     : 'ah-holding'
         },
         settings = $.extend({}, defaults, options);
 
@@ -70,7 +70,6 @@ $.fn.ahPlaceholder = function(options)
             }
 
             $.data(this, 'placeholder-string', $(this).attr(settings.placeholderAttr));
-            $.data(this, 'placeholder-color', $(this).css('color'));
             $.data(this, 'placeholder-password', $(this).attr('type') === 'password');
 
             var self        = this,
@@ -91,7 +90,7 @@ $.fn.ahPlaceholder = function(options)
 
             $self.closest('form').submit(function() {
                 if ( self.value === $.data(self, 'placeholder-string')
-                     && $self.css('color') === settings.placeholderColor ) {
+                     && $self.hasClass(settings.holdingClass) ) {
                          self.value = '';
                 }
                 return true;
@@ -152,7 +151,7 @@ $.fn.ahPlaceholder = function(options)
 				$self.attr('type', 'text');
 			}
             self.value = $.data(self, 'placeholder-string');
-            $self.css('color', settings.placeholderColor);
+            $self.addClass(settings.holdingClass);
         },
         _clearPlaceholder = function(self)
         {
@@ -161,7 +160,7 @@ $.fn.ahPlaceholder = function(options)
 				$self.attr('type', 'password');
 			}
             self.value = '';
-            $self.css('color', $.data(self, 'placeholder-color'));
+			$self.removeClass(settings.holdingClass);
         };
     // construct
     this.each(function()
