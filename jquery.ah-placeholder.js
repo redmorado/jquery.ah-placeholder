@@ -71,14 +71,13 @@ $.fn.ahPlaceholder = function(options)
 
             $.data(this, 'placeholder-string', $(this).attr(settings.placeholderAttr));
             $.data(this, 'placeholder-color', $(this).css('color'));
+            $.data(this, 'placeholder-password', $(this).attr('type') === 'password');
 
-            var phString    = $.data(this, 'placeholder-string'),
-                self        = this,
+            var self        = this,
                 $self       = $(this);
 
             if ( self.value === '' ) {
-                self.value = phString;
-                $self.css('color', settings.placeholderColor);
+				_setPlaceholder(this);
             }
 
             if ( settings.likeApple === true ) {
@@ -148,13 +147,21 @@ $.fn.ahPlaceholder = function(options)
         },
         _setPlaceholder = function(self)
         {
+			var $self = $(self);
+			if($.data(self, 'placeholder-password')){
+				$self.attr('type', 'text');
+			}
             self.value = $.data(self, 'placeholder-string');
-            $(self).css('color', settings.placeholderColor);
+            $self.css('color', settings.placeholderColor);
         },
         _clearPlaceholder = function(self)
         {
+			var $self = $(self);
+			if($.data(self, 'placeholder-password')){
+				$self.attr('type', 'password');
+			}
             self.value = '';
-            $(self).css('color', $.data(self, 'placeholder-color'));
+            $self.css('color', $.data(self, 'placeholder-color'));
         };
     // construct
     this.each(function()
