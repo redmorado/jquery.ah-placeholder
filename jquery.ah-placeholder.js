@@ -77,7 +77,7 @@ $.fn.ahPlaceholder = function(options)
                 $self       = $(this);
 
             if ( self.value === '' || self.value === phString ) {
-				_setPlaceholder(this);
+				_setPlaceholder(self);
             }
 
             if ( settings.likeApple === true ) {
@@ -149,9 +149,24 @@ $.fn.ahPlaceholder = function(options)
         {
 			var $self = $(self);
 			if($.data(self, 'placeholder-password')){
-				$self.attr('type', 'text');
+				try{
+					$self.attr('type', 'text');
+					self.value = $.data(self, 'placeholder-string');
+				} catch(error){
+					var textInput = $('<input type="text" class="'+self.className+'">')
+						.addClass(settings.holdingClass)
+						.val($self.attr('placeholder'))
+						.focus(function(){
+							$self.show().focus();
+							$(this).remove();
+						});
+					$self.after(textInput).hide().focus(function(){
+						textInput.remove();
+					});
+				}
+			} else{
+				self.value = $.data(self, 'placeholder-string');
 			}
-            self.value = $.data(self, 'placeholder-string');
             $self.addClass(settings.holdingClass);
         },
         _clearPlaceholder = function(self)
