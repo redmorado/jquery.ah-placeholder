@@ -72,10 +72,11 @@ $.fn.ahPlaceholder = function(options)
             $.data(this, 'placeholder-string', $(this).attr(settings.placeholderAttr));
             $.data(this, 'placeholder-password', $(this).attr('type') === 'password');
 
-            var self        = this,
+            var phString    = $.data(this, 'placeholder-string'),
+                self        = this,
                 $self       = $(this);
 
-            if ( self.value === '' ) {
+            if ( self.value === '' || self.value === phString ) {
 				_setPlaceholder(this);
             }
 
@@ -89,7 +90,7 @@ $.fn.ahPlaceholder = function(options)
             }
 
             $self.closest('form').submit(function() {
-                if ( self.value === $.data(self, 'placeholder-string')
+                if ( self.value === phString
                      && $self.hasClass(settings.holdingClass) ) {
                          self.value = '';
                 }
@@ -98,7 +99,7 @@ $.fn.ahPlaceholder = function(options)
         },
         onKeydown = function(e)
         {
-            if ( this.value === $.data(this, 'placeholder-string') ) {
+            if ( this.value === $.data(this, 'placeholder-string') && $(this).hasClass(settings.holdingClass) ) {
                 var key = keyCatch(e);
 
                 if ( ngCode.indexOf('@'+key+'@') !== -1 ) {
@@ -111,7 +112,7 @@ $.fn.ahPlaceholder = function(options)
         },
         onFocus = function()
         {
-            if ( this.value === $.data(this, 'placeholder-string') ) {
+            if ( this.value === $.data(this, 'placeholder-string') && $(this).hasClass(settings.holdingClass) ) {
                 _clearPlaceholder(this);
             }
         },
@@ -127,7 +128,7 @@ $.fn.ahPlaceholder = function(options)
         },
         moveCursorToHead = function()
         {
-            if ( this.value === $.data(this, 'placeholder-string') ) {
+            if ( this.value === $.data(this, 'placeholder-string') && $(this).hasClass(settings.holdingClass) ) {
                 $(this).focus();
                 if ( this.createTextRange ) {
                     var range = this.createTextRange();
